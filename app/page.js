@@ -32,7 +32,7 @@ function datePretty(d){if(!d)return'';let [y,m,day]=d.split('-');return `${Numbe
 
 export default function Page(){
  const [type,setType]=useState('tue'); const cfg=TYPES[type];
- const [date,setDate]=useState(''); const [start,setStart]=useState('16:30'); const [title,setTitle]=useState('FCA BASEBALL SAN DIEGO');
+ const [date,setDate]=useState(''); const [start,setStart]=useState('17:30'); const [title,setTitle]=useState('FCA BASEBALL SAN DIEGO');
  const [quote,setQuote]=useState('PREPARE. COMPETE. RESPOND.');
  const [warmup,setWarmup]=useState('Dynamic Warm-Up / Throwing Progression'); const [warmMin,setWarmMin]=useState(15);
  const [rotations,setRotations]=useState(()=>[0,1,2,3].map(i=>indoorRotation('tue',i)));
@@ -55,7 +55,7 @@ export default function Page(){
  return <main>
   <div className="screenApp">
    <header><div><div className="eyebrow">FCA BASEBALL SAN DIEGO</div><h1>Practice Planner</h1></div><div className="actions"><button onClick={savePlan}>Save Practice</button><button className="dark" onClick={()=>window.print()}>Print / PDF</button></div></header>
-   <section className="card controls"><label>Practice Type<select value={type} onChange={e=>changeType(e.target.value)}>{Object.entries(TYPES).map(([k,v])=><option key={k} value={k}>{v.label}</option>)}</select></label><label>Date<input type="date" value={date} onChange={e=>setDate(e.target.value)}/></label><label>Start Time<input type="time" value={start} onChange={e=>setStart(e.target.value)}/></label><label>Practice Heading<input value={title} onChange={e=>setTitle(e.target.value)}/></label><label className="quoteControl">Practice Quote / Theme<input value={quote} onChange={e=>setQuote(e.target.value)}/></label></section>
+   <section className="card controls"><label>Practice Type<select value={type} onChange={e=>changeType(e.target.value)}>{Object.entries(TYPES).map(([k,v])=><option key={k} value={k}>{v.label}</option>)}</select></label><label>Date<input type="date" value={date} onChange={e=>setDate(e.target.value)}/></label><label>Start Time<select value={start} onChange={e=>setStart(e.target.value)}><option value="17:30">5:30 PM</option><option value="19:00">7:00 PM</option></select></label><label>Practice Heading<input value={title} onChange={e=>setTitle(e.target.value)}/></label><label className="quoteControl">Practice Quote / Theme<input value={quote} onChange={e=>setQuote(e.target.value)}/></label></section>
    <section className="facility"><b>{cfg.location}</b><span>{cfg.note}</span></section>
    <section className="card"><h2>Opening Block</h2><div className="row"><input className="grow" value={warmup} onChange={e=>setWarmup(e.target.value)}/><label className="mini">Minutes<input type="number" min="0" value={warmMin} onChange={e=>setWarmMin(e.target.value)}/></label></div></section>
    <section className="card"><div className="sectionHead"><h2>Practice Rotations</h2>{!(type==='tue'||type==='wed')&&<button onClick={addRotation}>+ Add Rotation</button>}</div>
