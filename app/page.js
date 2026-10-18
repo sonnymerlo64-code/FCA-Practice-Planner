@@ -34,7 +34,7 @@ export default function Page(){
  const [type,setType]=useState('tue'); const cfg=TYPES[type];
  const [date,setDate]=useState(''); const [start,setStart]=useState('17:30'); const [title,setTitle]=useState('FCA BASEBALL SAN DIEGO');
  const [quote,setQuote]=useState('PREPARE. COMPETE. RESPOND.');
- const [warmup,setWarmup]=useState('Dynamic Warm-Up / Throwing Progression'); const [warmMin,setWarmMin]=useState(15);
+ const [warmup,setWarmup]=useState('Dynamic Warm-Up / Throwing Progression'); const [warmMin,setWarmMin]=useState(15); const [prayerMin,setPrayerMin]=useState(5);
  const [rotations,setRotations]=useState(()=>[0,1,2,3].map(i=>indoorRotation('tue',i)));
  const [drills,setDrills]=useState(START); const [newDrill,setNewDrill]=useState(''); const [newCat,setNewCat]=useState('offense'); const [notes,setNotes]=useState(''); const [saved,setSaved]=useState([]);
  useEffect(()=>{try{setSaved(JSON.parse(localStorage.getItem('fcaSavedPlans')||'[]'));setDrills(JSON.parse(localStorage.getItem('fcaDrillsV2')||'null')||START)}catch{}},[]);
@@ -46,18 +46,18 @@ export default function Page(){
  function assignGroupDrill(i,g,val){setRotations(r=>r.map((x,n)=>n===i?{...x,groupAssignments:{...x.groupAssignments,[g]:{...x.groupAssignments[g],drill:val}}}:x))}
  function addDrill(){let d=newDrill.trim();if(d&&!drills[newCat].includes(d)){setDrills({...drills,[newCat]:[...drills[newCat],d]});setNewDrill('')}}
  function removeDrill(cat,d){setDrills({...drills,[cat]:drills[cat].filter(x=>x!==d)})}
- function savePlan(){let plan={id:Date.now(),title,quote,date,start,type,warmup,warmMin,rotations,notes};let x=[plan,...saved];setSaved(x);localStorage.setItem('fcaSavedPlans',JSON.stringify(x));alert('Practice saved on this device.')}
- function loadPlan(p){setTitle(p.title||'FCA BASEBALL SAN DIEGO');setQuote(p.quote||'PREPARE. COMPETE. RESPOND.');setDate(p.date);setStart(p.start);setType(p.type);setWarmup(p.warmup);setWarmMin(p.warmMin);setRotations(p.rotations);setNotes(p.notes||'')}
+ function savePlan(){let plan={id:Date.now(),title,quote,date,start,type,warmup,warmMin,prayerMin,rotations,notes};let x=[plan,...saved];setSaved(x);localStorage.setItem('fcaSavedPlans',JSON.stringify(x));alert('Practice saved on this device.')}
+ function loadPlan(p){setTitle(p.title||'FCA BASEBALL SAN DIEGO');setQuote(p.quote||'PREPARE. COMPETE. RESPOND.');setDate(p.date);setStart(p.start);setType(p.type);setWarmup(p.warmup);setWarmMin((p.type==='tue'||p.type==='wed')?0:(p.warmMin??15));setPrayerMin(p.prayerMin??5);setRotations(p.rotations);setNotes(p.notes||'')}
  function delPlan(id){let x=saved.filter(p=>p.id!==id);setSaved(x);localStorage.setItem('fcaSavedPlans',JSON.stringify(x))}
- const timeline=useMemo(()=>{let cur=timeAdd(start,warmMin);return rotations.map(r=>{let a=cur;cur=timeAdd(cur,r.minutes);return [a,cur]})},[start,warmMin,rotations]);
- const end=timeline.length?timeline[timeline.length-1][1]:timeAdd(start,warmMin);
+ const timeline=useMemo(()=>{let cur=timeAdd(start,prayerMin+((type==='tue'||type==='wed')?0:Number(warmMin)||0));return rotations.map(r=>{let a=cur;cur=timeAdd(cur,r.minutes);return [a,cur]})},[start,prayerMin,warmMin,type,rotations]);
+ const end=timeline.length?timeline[timeline.length-1][1]:timeAdd(start,prayerMin+((type==='tue'||type==='wed')?0:Number(warmMin)||0));
  const DrillSelect=({value,onChange})=><select value={value||''} onChange={onChange}><option value="">Select drill...</option><optgroup label="OFFENSE">{drills.offense.map(d=><option key={'o'+d} value={d}>{d}</option>)}</optgroup><optgroup label="DEFENSE">{drills.defense.map(d=><option key={'d'+d} value={d}>{d}</option>)}</optgroup></select>;
  return <main>
   <div className="screenApp">
    <header><div><div className="eyebrow">FCA BASEBALL SAN DIEGO</div><h1>Practice Planner</h1></div><div className="actions"><button onClick={savePlan}>Save Practice</button><button className="dark" onClick={()=>window.print()}>Print / PDF</button></div></header>
    <section className="card controls"><label>Practice Type<select value={type} onChange={e=>changeType(e.target.value)}>{Object.entries(TYPES).map(([k,v])=><option key={k} value={k}>{v.label}</option>)}</select></label><label>Date<input type="date" value={date} onChange={e=>setDate(e.target.value)}/></label><label>Start Time<select value={start} onChange={e=>setStart(e.target.value)}>{(type==='tue'||type==='wed')?<><option value="17:30">5:30 PM</option><option value="19:00">7:00 PM</option></>:<><option value="12:30">12:30 PM</option><option value="14:00">2:00 PM</option></>}</select></label><label>Practice Heading<input value={title} onChange={e=>setTitle(e.target.value)}/></label><label className="quoteControl">Practice Quote / Theme<input value={quote} onChange={e=>setQuote(e.target.value)}/></label></section>
    <section className="facility"><b>{cfg.location}</b><span>{cfg.note}</span></section>
-   <section className="card"><h2>Opening Block</h2><div className="row"><input className="grow" value={warmup} onChange={e=>setWarmup(e.target.value)}/><label className="mini">Minutes<input type="number" min="0" value={warmMin} onChange={e=>setWarmMin(e.target.value)}/></label></div></section>
+   <section className="card"><h2>Opening Block</h2><div className="row"><strong className="grow">Opening Prayer — all practices</strong><label className="mini">Minutes<input type="number" min="0" value={prayerMin} onChange={e=>setPrayerMin(Math.max(0,Number(e.target.value)||0))}/></label></div>{!(type==='tue'||type==='wed')&&<div className="row"><input className="grow" value={warmup} onChange={e=>setWarmup(e.target.value)}/><label className="mini">Warm-Up Minutes<input type="number" min="0" value={warmMin} onChange={e=>setWarmMin(Math.max(0,Number(e.target.value)||0))}/></label></div>}</section>
    <section className="card"><div className="sectionHead"><h2>Practice Rotations</h2>{!(type==='tue'||type==='wed')&&<button onClick={addRotation}>+ Add Rotation</button>}</div>
     {(type==='tue'||type==='wed')&&<div className="indoorSummary"><b>4 Groups · 80 Minutes Total · 20-Minute Rotations</b><span>Groups 1 & 2 start hitting. Groups 3 & 4 start defense. Groups swap sides at the 40-minute mark.</span></div>}
     {rotations.map((r,i)=><div className="rotation" key={i}><div className="rotationHead"><input value={r.name} onChange={e=>updateRotation(i,'name',e.target.value)}/><b>{pretty(timeline[i]?.[0])}–{pretty(timeline[i]?.[1])}</b>{!(type==='tue'||type==='wed')&&<><label>Min <input type="number" min="1" value={r.minutes} onChange={e=>updateRotation(i,'minutes',e.target.value)}/></label><button className="danger" onClick={()=>setRotations(rotations.filter((_,n)=>n!==i))}>Remove</button></>}</div>
@@ -72,7 +72,8 @@ export default function Page(){
    <div className="printTop"><b>Date: {datePretty(date)}</b><div className="fcaMark">FCA</div></div>
    <div className="printHeading">{title}</div>
    <div className="printQuote">{quote}</div>
-   <div className="openingLine"><b>{pretty(start)}–{pretty(timeAdd(start,warmMin))}</b><span>{warmup}</span></div>
+   <div className="openingLine"><b>{pretty(start)}–{pretty(timeAdd(start,prayerMin))}</b><span>Opening Prayer</span></div>
+   {!(type==='tue'||type==='wed')&&<div className="openingLine"><b>{pretty(timeAdd(start,prayerMin))}–{pretty(timeAdd(start,prayerMin+Number(warmMin||0)))}</b><span>{warmup}</span></div>}
    <div className="printSectionTitle">{cfg.label.toUpperCase()} ROTATIONS — {type==='tue'||type==='wed'?'20 MINUTES EACH':(rotations.length?`${rotations[0].minutes} MINUTES EACH`:'')}</div>
    {(type==='tue'||type==='wed')?<>
     <table className="rotationTable groupPrint"><thead><tr><th>TIME</th>{GROUPS.map(g=><th key={g}>{g.toUpperCase()}</th>)}</tr></thead><tbody>{rotations.map((r,i)=><tr key={i}><td>{pretty(timeline[i]?.[0])}–{pretty(timeline[i]?.[1])}</td>{GROUPS.map(g=>{let a=r.groupAssignments?.[g]||{};return <td key={g}><b>{a.station}</b><br/>{a.drill||'—'}</td>})}</tr>)}</tbody></table>
