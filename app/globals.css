@@ -4,3 +4,5 @@
 .indoorSummary{display:flex;flex-direction:column;gap:4px;padding:10px 12px;margin:0 0 12px;border:1px solid #d8d8d8;background:#fafafa}.indoorSummary span{font-size:13px}.groupGrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;padding:10px 0}.groupGrid label{display:flex;flex-direction:column;gap:6px}.groupGrid label>span{display:flex;justify-content:space-between;gap:10px}.groupGrid small{font-weight:700}.halfway{display:none}
 @media(max-width:700px){.groupGrid{grid-template-columns:1fr}}
 @media print{.halfway{display:block;text-align:center;font-weight:800;border:2px solid #000;padding:5px;margin:7px 0;font-size:10pt}.groupPrint td b{font-size:9pt}}
+
+.groupCountControl{max-width:240px}.groupGrid label>select{margin-top:4px}.groupGrid label>span{min-height:18px}
