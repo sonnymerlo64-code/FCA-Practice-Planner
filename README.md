@@ -5,3 +5,5 @@ New: Tuesday and Wednesday Number of Groups dropdown (1–4). Only active groups
 To deploy: replace the contents of your GitHub repository with these files. Vercel will build the Next.js app automatically.
 
 V11: Tuesday and Wednesday support 1–6 groups. Groups 5–6 start on Turf and have editable station/drill assignments. Four-group preset remains unchanged.
+
+V12: Tuesday and Wednesday station dropdowns now offer Tunnel 1, Tunnel 2, Tunnel 3, Tunnel 4, and Turf. Existing group rotation defaults remain unchanged; coaches choose which tunnels are in use.

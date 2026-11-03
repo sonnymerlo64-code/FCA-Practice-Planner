@@ -2,8 +2,8 @@
 import {useEffect,useMemo,useState} from 'react';
 
 const TYPES={
- tue:{label:'Tuesday Indoor',location:'Indoor Facility',note:'2 large tunnels + turf area',stations:['Tunnel 1','Tunnel 2','Turf Area']},
- wed:{label:'Wednesday Indoor',location:'Indoor Facility',note:'3 tunnels split in half: front = hitting, back = fielding/pitching',stations:['Tunnel 1','Tunnel 2','Tunnel 3','Turf']},
+ tue:{label:'Tuesday Indoor',location:'Indoor Facility',note:'Up to 4 tunnels + turf area',stations:['Tunnel 1','Tunnel 2','Tunnel 3','Tunnel 4','Turf']},
+ wed:{label:'Wednesday Indoor',location:'Indoor Facility',note:'Up to 4 tunnels + turf area; split front/back spaces as needed',stations:['Tunnel 1','Tunnel 2','Tunnel 3','Tunnel 4','Turf']},
  sun46:{label:'Sunday 4th–6th',location:'Softball Field',note:'No on-field hitting',stations:['Infield','Outfield','Bullpen / Catching','Baserunning / Team Defense']},
  sun78:{label:'Sunday 7th–8th',location:'Upper Baseball Field',note:'No on-field hitting',stations:['Infield','Outfield','Bullpen / Catching','Baserunning / Team Defense']}
 };
@@ -12,7 +12,7 @@ const START={
  defense:['Throwing Progression','Ground Ball Fundamentals','Forehand / Backhand','Short Hops','Double Plays','Fly Ball Communication','Drop Steps','Cuts & Relays','Rundowns','Bunt Defense','1st & 3rd Defense','Picks','Pitcher Fielding Practice','Bullpen','Catcher Receiving','Catcher Blocking','Catcher Throwing','Team Defense']
 };
 const GROUPS=['Group 1','Group 2','Group 3','Group 4','Group 5','Group 6'];
-const STATION_OPTIONS={tue:['Tunnel 1','Tunnel 2','Turf'],wed:['Tunnel 1','Tunnel 2','Tunnel 3','Turf']};
+const STATION_OPTIONS={tue:['Tunnel 1','Tunnel 2','Tunnel 3','Tunnel 4','Turf'],wed:['Tunnel 1','Tunnel 2','Tunnel 3','Tunnel 4','Turf']};
 const TUE_MATRIX=[
  ['Tunnel 1','Tunnel 2','Turf','Turf'],
  ['Tunnel 2','Tunnel 1','Turf','Turf'],
